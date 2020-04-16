@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <head><title>Refrigerator Notes</title></head>
+    <body>
+        <style>
+            body{
+                background-color:rgb(37, 37, 37);
+            }
+
+            #paper {
+            width: 600px;
+            /*height: 700px;*/
+            position: relative;
+            margin: 20px auto;
+            padding-top: 40px;
+            padding-bottom: 10px;
+            background-color: white;
+            box-shadow: 0px 0px 30px 0px black;
+            }
+
+            /* styling red vertical line */
+            #paper::before {
+            content: '';
+            width: 2px;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 40px;
+            background-color: rgba(255,0,0,0.6);
+            }
+
+            /* styling blue horizontal lines */
+            #pattern {
+            height: 100%;
+            /*background-image: repeating-linear-gradient(white 0px, white 24px, teal 25px);*/
+            }
+
+            /* styling text content */
+            #content {
+            padding-top: 6px;
+            /*padding-left: 56px;*/
+            /*padding-right: 16px;*/
+            line-height: 25px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /*font-size: 19px;
+            letter-spacing: 1px;
+            word-spacing: 5px;*/
+            }
+
+            #content h1,input[type='text'],p{
+            margin-left:56px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /*margin-right:16px;*/
+            }
+
+            input[type='text']{
+                box-shadow:0px 0px 5px rgb(209, 209, 209);
+                border:none;
+                padding:5px;
+                margin-right:0px;
+                float:left;
+                width:70%;
+                font-size:16pt;
+            }
+
+            #add-note{
+                box-shadow:1px 0px 5px rgb(209, 209, 209);
+                border:none;
+                float:left;
+                margin-left:0px;
+                height:38.4px;
+                width:10%;
+            }
+
+            #add-note:hover{
+                background-color:rgb(184, 184, 184);
+            }
+
+            #content #checklist div{
+            margin-left:56px;
+            }
+
+            hr{
+            margin-left:0px;
+            border:0.5px solid teal;
+            }
+            .delete-button{
+                float:right;
+                height:100%;
+                display:none;
+                box-shadow:-1px 0px 5px rgb(209, 209, 209);
+                border:none;
+                width:10%;
+                font-size:16pt;
+            }
+            .delete-button:hover{
+                background-color:rgb(184, 184, 184);
+            }
+        </style>
+        <div id='paper'>
+            <div id='pattern'>
+                <div id=content>
+                    <h1>Refrigerator Notes</h1>
+                    <hr>
+                    <div if='inputdiv'>
+                        <input id='new-note' type='text' placeholder='Procrastinate More'>
+                        <button id='add-note' onclick='addTask()'>+</button>                        
+                    </div>
+                    <br style='clear:both'>
+                    <hr>
+                    <div id='checklist'></div>                           
+                    <br>
+                    <p style='color:rgb(167, 167, 167);'>Created by <a href='github.com/knosmos/'>knosmos</a> due to boredom</p>
+                </div>
+            </div>
+        </div>
+        <script>
+            let tasknum=1;
+            function addTask(){
+                let div = document.createElement('div');
+                div.innerHTML=`
+                <input name='task${tasknum}' type=checkbox onclick="let n=document.getElementById('label${tasknum}'); if(n.style.textDecoration==='line-through'){n.style.textDecoration='none';} else{n.style.textDecoration='line-through'}">
+                <label id='label${tasknum}'>${document.getElementById('new-note').value}</label>
+                `;
+                div.setAttribute('id',`item${tasknum}`);
+                div.setAttribute('onmouseover',`document.getElementById('button${tasknum}').style.display='block';`);
+                div.setAttribute('onmouseout',`document.getElementById('button${tasknum}').style.display='none';`);
+                let button = document.createElement('BUTTON');
+                button.innerHTML='×';
+                button.setAttribute('id',`button${tasknum}`);
+                button.setAttribute('class','delete-button');
+                button.setAttribute('onclick',`removeElement('item${tasknum}');removeElement('line${tasknum}')`);
+                let line = document.createElement('hr');
+                line.setAttribute('id',`line${tasknum}`);
+                document.getElementById('checklist').prepend(line);
+                document.getElementById('checklist').prepend(div);
+                document.getElementById(`item${tasknum}`).appendChild(button);
+                tasknum++;
+            }
+            function removeElement(elementId){
+                let element = document.getElementById(elementId);
+                element.parentNode.removeChild(element);
+            }
+        </script>
+    </body>
+</html>
